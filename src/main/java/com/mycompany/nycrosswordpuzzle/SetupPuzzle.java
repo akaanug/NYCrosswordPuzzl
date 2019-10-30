@@ -7,8 +7,8 @@ package com.mycompany.nycrosswordpuzzle;
 
 import GUI.MainBoard;
 import GUI.CellGUI;
+import GUI.GameFrame;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 
 /**
  * Create cells and assign properties
@@ -31,12 +31,8 @@ public class SetupPuzzle {
 
         b = new MainBoard( getWidth( cellAmount ), cellGUIs );
 
-        JFrame f = new JFrame( " NY CROSSWORD " );
-        MainBoard bn = new MainBoard( b );
-        f.add( bn );
-        f.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-
-        f.setVisible( true );
+        GameFrame f = new GameFrame(b);
+        f.setVisible(true);
     }
 
     private ArrayList createAllCells() {

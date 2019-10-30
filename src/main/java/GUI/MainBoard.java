@@ -12,9 +12,6 @@ import java.util.ArrayList;
  * @author kaan
  */
 public class MainBoard extends javax.swing.JPanel {
-    
-    int w;
-    ArrayList<CellGUI> cg;
 
     /**
      * Creates new form MainBoard
@@ -22,17 +19,9 @@ public class MainBoard extends javax.swing.JPanel {
      * @param cellGUIs
      */
     public MainBoard( int width, ArrayList<CellGUI> cellGUIs ) {
-        w = width;
-        cg = cellGUIs;
         initComponents();
         setGrid( width );
         addCells( cellGUIs );
-    }
-    
-    public MainBoard( MainBoard b ) {
-        initComponents();
-        setGrid( b.w );
-        addCells( b.cg );
     }
 
     /**
