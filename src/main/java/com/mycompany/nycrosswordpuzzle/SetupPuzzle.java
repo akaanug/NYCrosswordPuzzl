@@ -31,12 +31,12 @@ public class SetupPuzzle {
 
         b = new MainBoard( getWidth( cellAmount ), cellGUIs );
 
-        GameFrame f = new GameFrame(b);
-        f.setVisible(true);
+        GameFrame f = new GameFrame( b );
+        f.setVisible( true );
     }
 
     private ArrayList createAllCells() {
-        ArrayList<Cell> allCells;
+        ArrayList allCells;
         ArrayList<Boolean> isBlock = c.getIsBlock();
         allCells = new ArrayList();
         for ( int i = 0; i < cellAmount; i++ ) {
@@ -55,6 +55,7 @@ public class SetupPuzzle {
     public final ArrayList<CellGUI> assignCells( ArrayList<Cell> cells ) {
 
         ArrayList<CellGUI> allGUICells = new ArrayList();
+
         cells.forEach( ( oneCell ) -> {
             allGUICells.add( new CellGUI( oneCell ) );
             System.out.println( oneCell );

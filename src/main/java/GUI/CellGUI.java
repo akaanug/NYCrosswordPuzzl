@@ -6,13 +6,16 @@
 package GUI;
 
 import com.mycompany.nycrosswordpuzzle.Cell;
+import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  *
  * @author kaan
  */
 public class CellGUI extends javax.swing.JPanel {
-    
+
     private final String correctWord;
     private String currentWord;
     private final int cellNo;
@@ -23,10 +26,11 @@ public class CellGUI extends javax.swing.JPanel {
 
     /**
      * Creates new form Cell
+     *
      * @param c
      */
     public CellGUI( Cell c ) {
-        
+
         this.c = c;
         this.cellNo = c.getCellNo();
         this.correctWord = c.getCorrectWord();
@@ -34,8 +38,27 @@ public class CellGUI extends javax.swing.JPanel {
         this.isBlock = c.isIsBlock();
         this.downClue = c.getDownClue();
         this.acrossClue = c.getAcrossClue();
-        
+
         initComponents();
+
+        if ( isBlock ) {
+            clueNum.setForeground( Color.black );
+            clueNum.setBackground( Color.black );
+            answerText.setEditable( false );
+            answerText.setEnabled( false );
+            answerText.setForeground( Color.black );
+            answerText.setBackground( Color.black );
+        }
+
+        answerText.addKeyListener( new KeyAdapter() {
+            @Override
+            public void keyTyped( KeyEvent e ) {
+                if ( answerText.getText().length() >= 1 ) // limit textfield to 3 characters
+                {
+                    e.consume();
+                }
+            }
+        } );
     }
 
     /**
