@@ -42,8 +42,6 @@ public class CellGUI extends javax.swing.JPanel {
         initComponents();
 
         if ( isBlock ) {
-            clueNum.setForeground( Color.black );
-            clueNum.setBackground( Color.black );
             answerText.setEditable( false );
             answerText.setEnabled( false );
             answerText.setForeground( Color.black );
@@ -77,9 +75,10 @@ public class CellGUI extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
 
         clueNum.setEditable(false);
+        clueNum.setBackground(new java.awt.Color(255, 255, 255));
         clueNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        clueNum.setText(c.getCellNo() + "");
-        clueNum.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        clueNum.setText(c.getClueLabelAsString() );
+        clueNum.setBorder(new javax.swing.border.MatteBorder(null));
         clueNum.setEnabled(false);
 
         answerText.setBackground(new java.awt.Color(255, 255, 255));
@@ -92,17 +91,17 @@ public class CellGUI extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(clueNum, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 79, Short.MAX_VALUE))
+                .addComponent(clueNum, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(clueNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(clueNum, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

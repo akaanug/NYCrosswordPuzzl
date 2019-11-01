@@ -79,6 +79,37 @@ public class Parser {
         return clueLabels;
     }
 
+    public static ArrayList<Integer> getClueLabelsOnCells() {
+        String url = "https://www.nytimes.com/crosswords/game/mini";
+        ArrayList<Integer> clueLabels = new ArrayList();
+        int clueAmount = 0;
+        String clueNums;
+        try {
+            Document doc = Jsoup.parse( new URL( url ), 10000 );
+            Elements newelm = doc.select( "g" );
+
+            PrintWriter pw = new PrintWriter( "getClueLabelsOnCells" + day + month + year + " .txt" );
+            for ( int i = 4; i < newelm.size() - 1; i++ ) {
+                clueNums = (newelm.get( i ).text());
+
+                if ( clueNums.equals( "" ) ) {
+                    clueLabels.add( 0 );
+                    pw.println( 0 );
+                    System.out.println( 0 );
+                } else {
+                    clueLabels.add( (Integer.parseInt( clueNums )) );
+                    pw.println( (Integer.parseInt( clueNums )) );
+//                    System.out.println( (Integer.parseInt( clueNums )) );
+                }
+
+            }
+            pw.close();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+        return clueLabels;
+    }
+
     public static int getCellAmount() {
         String url = "https://www.nytimes.com/crosswords/game/mini";
         int cellAmount = 0;
@@ -100,6 +131,7 @@ public class Parser {
         getBoxes();
         getClueLabels();
         getCellAmount();
+        getClueLabelsOnCells();
 
     }
 }

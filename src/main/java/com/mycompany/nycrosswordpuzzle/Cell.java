@@ -17,8 +17,9 @@ public class Cell {
     private final boolean isBlock;
     private final int downClue;
     private final int acrossClue;
+    private int clueLabel;
 
-    public Cell( String correctWord, String currentWord, int cellNo, boolean isBlock, int downClue, int acrossClue ) {
+    public Cell( String correctWord, String currentWord, int cellNo, boolean isBlock, int downClue, int acrossClue, int clueLabel ) {
 
         this.cellNo = cellNo;
         this.correctWord = correctWord;
@@ -26,7 +27,24 @@ public class Cell {
         this.isBlock = isBlock;
         this.downClue = downClue;
         this.acrossClue = acrossClue;
+        this.clueLabel = clueLabel;
 
+    }
+
+    public String getClueLabelAsString() {
+        if( isBlock ) {
+            return null;
+        }
+        
+        if ( clueLabel == 0 ) {
+            return "";
+        } else {
+            return clueLabel + "";
+        }
+    }
+
+    public void setClueLabel( int clueLabel ) {
+        this.clueLabel = clueLabel;
     }
 
     public void setCurrentWord( String currentWord ) {

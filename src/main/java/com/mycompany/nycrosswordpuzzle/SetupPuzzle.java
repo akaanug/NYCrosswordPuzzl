@@ -9,6 +9,8 @@ import GUI.MainBoard;
 import GUI.CellGUI;
 import GUI.GameFrame;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Create cells and assign properties
@@ -22,16 +24,18 @@ public class SetupPuzzle {
     private final MainBoard b;
     private final ArrayList<Cell> cells;
     private final ArrayList<CellGUI> cellGUIs;
+    HashMap<Integer, Integer> clueLabelsOnCells;
 
     public SetupPuzzle() {
         c = new Constants();
         cellAmount = c.getCellAmount();
+        clueLabelsOnCells = c.getClueLabelsOnCells();
         cells = createAllCells();
         cellGUIs = assignCells( cells );
 
         b = new MainBoard( getWidth( cellAmount ), cellGUIs );
 
-        GameFrame f = new GameFrame( b );
+        GameFrame f = new GameFrame( b, c );
         f.setVisible( true );
     }
 
@@ -46,8 +50,9 @@ public class SetupPuzzle {
             boolean isTheBlock = (isBlock).get( i );
             int downClue = 0;
             int acrossClue = 0;
+            int clueLabelOnCell = getClueLabelOnCell(i);
             allCells.add( new Cell( correctWord, currentWord, cellNo, isTheBlock, downClue,
-                    acrossClue ) );
+                    acrossClue, clueLabelOnCell ) );
         }
         return allCells;
     }
@@ -58,7 +63,6 @@ public class SetupPuzzle {
 
         cells.forEach( ( oneCell ) -> {
             allGUICells.add( new CellGUI( oneCell ) );
-            System.out.println( oneCell );
         } );
 
         return allGUICells;
@@ -67,6 +71,10 @@ public class SetupPuzzle {
 
     public final int getWidth( int cellAmount ) {
         return (int) (Math.sqrt( cellAmount ));
+    }
+    
+    public final int getClueLabelOnCell( int cellNum ) {
+        return clueLabelsOnCells.get(cellNum);
     }
 
 }
