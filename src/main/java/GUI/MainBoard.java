@@ -13,8 +13,11 @@ import java.util.ArrayList;
  */
 public class MainBoard extends javax.swing.JPanel {
 
+    ArrayList<CellGUI> cellGUIs;
+
     /**
      * Creates new form MainBoard
+     *
      * @param width
      * @param cellGUIs
      */
@@ -22,6 +25,7 @@ public class MainBoard extends javax.swing.JPanel {
         initComponents();
         setGrid( width );
         addCells( cellGUIs );
+        this.cellGUIs = cellGUIs;
     }
 
     /**
@@ -41,6 +45,11 @@ public class MainBoard extends javax.swing.JPanel {
         board.setLayout(new java.awt.GridLayout(1, 0));
 
         showAnswers.setText("Show Answers");
+        showAnswers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showAnswersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,6 +73,15 @@ public class MainBoard extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void showAnswersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAnswersActionPerformed
+        // TODO add your handling code here:
+        System.out.println( "reveal button clicked" );
+        cellGUIs.forEach( ( c ) -> {
+            if ( !c.isBlock() ) {
+                c.reveal();
+            }
+        } );
+    }//GEN-LAST:event_showAnswersActionPerformed
 
     private void setGrid( int width ) {
         board.setLayout( new java.awt.GridLayout( width, width ) );
@@ -74,7 +92,7 @@ public class MainBoard extends javax.swing.JPanel {
             board.add( (CellGUI) c );
         } );
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel board;
     private javax.swing.JButton showAnswers;

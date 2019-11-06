@@ -25,12 +25,15 @@ public class SetupPuzzle {
     private final ArrayList<Cell> cells;
     private final ArrayList<CellGUI> cellGUIs;
     HashMap<Integer, Integer> clueLabelsOnCells;
+    private final ArrayList answers;
 
     public SetupPuzzle() {
         c = new Constants();
         cellAmount = c.getCellAmount();
         clueLabelsOnCells = c.getClueLabelsOnCells();
+        answers = c.getAnswers();
         cells = createAllCells();
+        
         cellGUIs = assignCells( cells );
 
         b = new MainBoard( getWidth( cellAmount ), cellGUIs );
@@ -43,6 +46,7 @@ public class SetupPuzzle {
         ArrayList allCells;
         ArrayList<Boolean> isBlock = c.getIsBlock();
         allCells = new ArrayList();
+        int count = 0;
         for ( int i = 0; i < cellAmount; i++ ) {
             String correctWord = "";
             String currentWord = "";
@@ -51,6 +55,13 @@ public class SetupPuzzle {
             int downClue = 0;
             int acrossClue = 0;
             int clueLabelOnCell = getClueLabelOnCell(i);
+            
+            if( !isTheBlock ) {
+                correctWord = (String)answers.get( count );
+                System.out.println( "Current Word: " + correctWord );
+                count++;
+            }
+            
             allCells.add( new Cell( correctWord, currentWord, cellNo, isTheBlock, downClue,
                     acrossClue, clueLabelOnCell ) );
         }

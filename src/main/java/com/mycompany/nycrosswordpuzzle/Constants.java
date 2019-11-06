@@ -17,6 +17,7 @@ public class Constants {
 
     private final int cellAmount;
     private final ArrayList<Boolean> isBlock;
+    private final ArrayList<String> answers;
     private final HashMap<Integer, String> acrossClues;
     private final HashMap<Integer, String> downClues;
     private final HashMap<Integer, Integer> clueLabelsOnCells;
@@ -27,6 +28,11 @@ public class Constants {
         this.downClues = getDownClues();
         this.isBlock = isTheBlock();
         this.clueLabelsOnCells = clueLabelsOnCells();
+        this.answers = Parser.tempAnsw();
+    }
+    
+    public final ArrayList<String> getAnswers() {
+        return answers;
     }
     
     public final HashMap<Integer, Integer> getClueLabelsOnCells() {

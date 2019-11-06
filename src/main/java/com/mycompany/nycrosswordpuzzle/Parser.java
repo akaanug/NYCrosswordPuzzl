@@ -1,5 +1,8 @@
 package com.mycompany.nycrosswordpuzzle;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -124,6 +127,57 @@ public class Parser {
         }
 
         return cellAmount;
+    }
+
+    public static ArrayList getAnswers() {
+        String url = "https://www.nytimes.com/crosswords/game/mini";
+        ArrayList<String> answers = new ArrayList();
+        String allAnswers = "";
+        SeleniumConnection s = new SeleniumConnection();
+
+        try {
+            Document doc = Jsoup.parse( s.pageSource() );
+            Elements newelm = doc.select( "#xwd-board > g:nth-child(5)" );
+            PrintWriter pw = new PrintWriter( "answers" + day + month + year + ".txt" );
+            for ( int i = 0; i < newelm.size(); i++ ) {
+                allAnswers = (newelm.get( i ).text()).replaceAll( "[^A-Za-z]+", "" );
+                System.out.println( allAnswers );
+                pw.println( newelm.get( i ).text() );
+            }
+            pw.close();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+
+        for ( char c : allAnswers.toCharArray() ) {
+            System.out.println( c );
+            answers.add( c + "" );
+        }
+
+        s.closeCon();
+
+        return answers;
+    }
+
+    public static ArrayList tempAnsw() {
+        ArrayList<String> ans = new ArrayList();
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader( new FileReader(
+                    "/Users/kaan/NetBeansProjects/answ/answers6102019.txt" ) );
+            String line = reader.readLine();
+            while ( line != null ) {
+                System.out.println( line );
+                ans.add( line );
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+        
+        return ans;
     }
 
     public static void main( String[] args ) {

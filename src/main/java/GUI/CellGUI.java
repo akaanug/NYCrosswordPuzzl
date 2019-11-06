@@ -34,7 +34,7 @@ public class CellGUI extends javax.swing.JPanel {
         this.c = c;
         this.cellNo = c.getCellNo();
         this.correctWord = c.getCorrectWord();
-        this.currentWord = c.getCorrectWord();
+        this.currentWord = c.getCurrentWord();
         this.isBlock = c.isIsBlock();
         this.downClue = c.getDownClue();
         this.acrossClue = c.getAcrossClue();
@@ -111,4 +111,13 @@ public class CellGUI extends javax.swing.JPanel {
     private javax.swing.JTextField clueNum;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    void reveal() {
+        answerText.setText( correctWord );
+        System.out.println("revealed" + correctWord);
+    }
+    
+    boolean isBlock() {
+        return isBlock;
+    }
 }
