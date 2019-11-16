@@ -23,6 +23,7 @@ public class CellGUI extends javax.swing.JPanel {
     private final int downClue;
     private final int acrossClue;
     private final Cell c;
+    private final String clueLabel;
 
     /**
      * Creates new form Cell
@@ -38,11 +39,12 @@ public class CellGUI extends javax.swing.JPanel {
         this.isBlock = c.isIsBlock();
         this.downClue = c.getDownClue();
         this.acrossClue = c.getAcrossClue();
+        this.clueLabel = c.getClueLabelAsString();
 
         initComponents();
 
         if ( isBlock ) {
-            answerText.setEditable( false );
+//            answerText.setEditable( false );
             answerText.setEnabled( false );
             answerText.setForeground( Color.black );
             answerText.setBackground( Color.black );
@@ -68,53 +70,76 @@ public class CellGUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        clueNum = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        answerText = new javax.swing.JTextPane();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        answerText = new javax.swing.JTextField();
+        clueNo = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        clueNum.setEditable(false);
-        clueNum.setBackground(new java.awt.Color(255, 255, 255));
-        clueNum.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        clueNum.setText(c.getClueLabelAsString() );
-        clueNum.setBorder(new javax.swing.border.MatteBorder(null));
-        clueNum.setEnabled(false);
+        answerText.setFont(new java.awt.Font("Dialog", 1, 40)); // NOI18N
+        answerText.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        answerText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                answerTextActionPerformed(evt);
+            }
+        });
 
-        answerText.setBackground(new java.awt.Color(255, 255, 255));
-        answerText.setBorder(null);
-        answerText.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
-        answerText.setCaretColor(new java.awt.Color(0, 0, 0));
-        jScrollPane1.setViewportView(answerText);
+        clueNo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        clueNo.setText(clueLabel);
+
+        jLayeredPane1.setLayer(answerText, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(clueNo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addComponent(clueNo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 34, Short.MAX_VALUE))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(answerText, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addComponent(clueNo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 38, Short.MAX_VALUE))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(answerText, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(clueNum, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(clueNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void answerTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_answerTextActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextPane answerText;
-    private javax.swing.JTextField clueNum;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField answerText;
+    private javax.swing.JLabel clueNo;
+    private javax.swing.JLayeredPane jLayeredPane1;
     // End of variables declaration//GEN-END:variables
 
     void reveal() {
         answerText.setText( correctWord );
-        System.out.println("revealed" + correctWord);
+        answerText.setEnabled(false);
+//        System.out.println("revealed" + correctWord);
     }
     
     boolean isBlock() {

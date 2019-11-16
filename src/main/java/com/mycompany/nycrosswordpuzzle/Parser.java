@@ -102,7 +102,6 @@ public class Parser {
                 } else {
                     clueLabels.add( (Integer.parseInt( clueNums )) );
                     pw.println( (Integer.parseInt( clueNums )) );
-//                    System.out.println( (Integer.parseInt( clueNums )) );
                 }
 
             }
@@ -142,16 +141,17 @@ public class Parser {
             for ( int i = 0; i < newelm.size(); i++ ) {
                 allAnswers = (newelm.get( i ).text()).replaceAll( "[^A-Za-z]+", "" );
                 System.out.println( allAnswers );
-                pw.println( newelm.get( i ).text() );
+                pw.println( allAnswers );
+            }
+            pw.close();
+
+            for ( char c : allAnswers.toCharArray() ) {
+                System.out.println( c );
+                answers.add( c + "" );
             }
             pw.close();
         } catch ( Exception e ) {
             e.printStackTrace();
-        }
-
-        for ( char c : allAnswers.toCharArray() ) {
-            System.out.println( c );
-            answers.add( c + "" );
         }
 
         s.closeCon();
@@ -159,28 +159,8 @@ public class Parser {
         return answers;
     }
 
-    public static ArrayList tempAnsw() {
-        ArrayList<String> ans = new ArrayList();
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader( new FileReader(
-                    "/Users/kaan/NetBeansProjects/answ/answers6102019.txt" ) );
-            String line = reader.readLine();
-            while ( line != null ) {
-                System.out.println( line );
-                ans.add( line );
-                // read next line
-                line = reader.readLine();
-            }
-            reader.close();
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        }
-        
-        return ans;
-    }
-
     public static void main( String[] args ) {
+        getAnswers();
         getClues();
         getBoxes();
         getClueLabels();

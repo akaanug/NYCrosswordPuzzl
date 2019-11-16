@@ -5,25 +5,6 @@
     <artifactId>NYCrossword</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>AbsoluteLayout</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.8.3</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>3.7.1</version>
-            <type>jar</type>
-        </dependency>
-    </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -37,4 +18,35 @@
             <url>file:${project.basedir}/lib</url>
         </repository>
     </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>3.7.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-stubs</artifactId>
+            <version>1.9.69</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>okhttp.id</groupId>
+            <artifactId>okhttp.id</artifactId>
+            <version>3.11.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>okio.id</groupId>
+            <artifactId>okio.id</artifactId>
+            <version>1.14.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+    </dependencies>
 </project>

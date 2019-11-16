@@ -26,6 +26,12 @@ public class MainBoard extends javax.swing.JPanel {
         setGrid( width );
         addCells( cellGUIs );
         this.cellGUIs = cellGUIs;
+        
+        cellGUIs.forEach( ( c ) -> {
+            if ( !c.isBlock() ) {
+                c.reveal();
+            }
+        } );
     }
 
     /**
@@ -38,18 +44,10 @@ public class MainBoard extends javax.swing.JPanel {
     private void initComponents() {
 
         board = new javax.swing.JPanel();
-        showAnswers = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         board.setLayout(new java.awt.GridLayout(1, 0));
-
-        showAnswers.setText("Show Answers");
-        showAnswers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showAnswersActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -57,31 +55,17 @@ public class MainBoard extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(board, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showAnswers, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(showAnswers)
-                .addGap(18, 18, 18)
-                .addComponent(board, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void showAnswersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAnswersActionPerformed
-        // TODO add your handling code here:
-        System.out.println( "reveal button clicked" );
-        cellGUIs.forEach( ( c ) -> {
-            if ( !c.isBlock() ) {
-                c.reveal();
-            }
-        } );
-    }//GEN-LAST:event_showAnswersActionPerformed
 
     private void setGrid( int width ) {
         board.setLayout( new java.awt.GridLayout( width, width ) );
@@ -95,6 +79,5 @@ public class MainBoard extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel board;
-    private javax.swing.JButton showAnswers;
     // End of variables declaration//GEN-END:variables
 }

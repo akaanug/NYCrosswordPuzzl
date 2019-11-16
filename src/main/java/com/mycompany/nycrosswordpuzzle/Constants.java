@@ -5,8 +5,10 @@
  */
 package com.mycompany.nycrosswordpuzzle;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -24,11 +26,11 @@ public class Constants {
 
     public Constants() {
         this.cellAmount = getCellAmount();
-        this.acrossClues = getAcrossClues();
-        this.downClues = getDownClues();
+        this.acrossClues = acrossClues();
+        this.downClues = downClues();
         this.isBlock = isTheBlock();
         this.clueLabelsOnCells = clueLabelsOnCells();
-        this.answers = Parser.tempAnsw();
+        this.answers = retAnswers();
     }
     
     public final ArrayList<String> getAnswers() {
@@ -87,7 +89,7 @@ public class Constants {
         return isBox;
     }
 
-    public final HashMap getAcrossClues() {
+    public final HashMap acrossClues() {
         HashMap<Integer, String> clues = new HashMap<>();
         int clueSize = Parser.getClues().size() / 2;
         for ( int i = 0; i < clueSize; i++ ) {
@@ -95,11 +97,10 @@ public class Constants {
             String clue = (String) Parser.getClues().get( i );
             clues.put( clueLabel, clue );
         }
-//        System.out.println( "Across Clues:\n" + Arrays.asList( clues ) );
         return clues;
     }
 
-    public final HashMap getDownClues() {
+    public final HashMap downClues() {
         HashMap<Integer, String> clues = new HashMap<>();
         int clueSize = Parser.getClues().size() / 2;
         for ( int i = clueSize; i < clueSize * 2; i++ ) {
@@ -107,8 +108,11 @@ public class Constants {
             String clue = (String) Parser.getClues().get( i );
             clues.put( clueLabel, clue );
         }
-//        System.out.println( "Down Clues:\n" + Arrays.asList( clues ) );
         return clues;
+    }
+    
+    public final ArrayList<String> retAnswers() {
+        return Parser.getAnswers();
     }
 
     public int getCellCount() {
