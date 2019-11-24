@@ -47,7 +47,7 @@ public class MainBoard extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        board.setLayout(new java.awt.GridLayout(1, 0));
+        board.setLayout(new java.awt.GridLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -55,15 +55,15 @@ public class MainBoard extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(board, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(board, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

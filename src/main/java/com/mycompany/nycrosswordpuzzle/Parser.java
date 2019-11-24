@@ -1,8 +1,5 @@
 package com.mycompany.nycrosswordpuzzle;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -98,7 +95,7 @@ public class Parser {
                 if ( clueNums.equals( "" ) ) {
                     clueLabels.add( 0 );
                     pw.println( 0 );
-                    System.out.println( 0 );
+//                    System.out.println( 0 );
                 } else {
                     clueLabels.add( (Integer.parseInt( clueNums )) );
                     pw.println( (Integer.parseInt( clueNums )) );
@@ -140,13 +137,13 @@ public class Parser {
             PrintWriter pw = new PrintWriter( "answers" + day + month + year + ".txt" );
             for ( int i = 0; i < newelm.size(); i++ ) {
                 allAnswers = (newelm.get( i ).text()).replaceAll( "[^A-Za-z]+", "" );
-                System.out.println( allAnswers );
+//                System.out.println( allAnswers );
                 pw.println( allAnswers );
             }
             pw.close();
 
             for ( char c : allAnswers.toCharArray() ) {
-                System.out.println( c );
+//                System.out.println( c );
                 answers.add( c + "" );
             }
             pw.close();
@@ -160,6 +157,7 @@ public class Parser {
     }
 
     public static void main( String[] args ) {
+
         getAnswers();
         getClues();
         getBoxes();

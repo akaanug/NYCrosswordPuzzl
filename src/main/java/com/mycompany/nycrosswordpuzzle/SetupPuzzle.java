@@ -8,6 +8,7 @@ package com.mycompany.nycrosswordpuzzle;
 import GUI.MainBoard;
 import GUI.CellGUI;
 import GUI.GameFrame;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,7 +27,7 @@ public class SetupPuzzle {
     HashMap<Integer, Integer> clueLabelsOnCells;
     private final ArrayList answers;
 
-    public SetupPuzzle() {
+    public SetupPuzzle() throws SQLException {
         c = new Constants();
         cellAmount = c.getCellAmount();
         clueLabelsOnCells = c.getClueLabelsOnCells();
@@ -57,7 +58,7 @@ public class SetupPuzzle {
             
             if( !isTheBlock ) {
                 correctWord = (String)answers.get( count );
-                System.out.println( "Current Word: " + correctWord );
+//                System.out.println( "Current Word: " + correctWord );
                 count++;
             }
             
