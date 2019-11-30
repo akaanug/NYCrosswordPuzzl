@@ -33,7 +33,7 @@ public class SetupPuzzle {
         clueLabelsOnCells = c.getClueLabelsOnCells();
         answers = c.getAnswers();
         cells = createAllCells();
-        
+
         cellGUIs = assignCells( cells );
 
         b = new MainBoard( getWidth( cellAmount ), cellGUIs );
@@ -54,14 +54,14 @@ public class SetupPuzzle {
             boolean isTheBlock = (isBlock).get( i );
             int downClue = 0;
             int acrossClue = 0;
-            int clueLabelOnCell = getClueLabelOnCell(i);
-            
-            if( !isTheBlock ) {
-                correctWord = (String)answers.get( count );
+            int clueLabelOnCell = getClueLabelOnCell( i );
+
+            if ( !isTheBlock ) {
+                correctWord = (String) answers.get( count );
 //                System.out.println( "Current Word: " + correctWord );
                 count++;
             }
-            
+
             allCells.add( new Cell( correctWord, currentWord, cellNo, isTheBlock, downClue,
                     acrossClue, clueLabelOnCell ) );
         }
@@ -83,9 +83,9 @@ public class SetupPuzzle {
     public final int getWidth( int cellAmount ) {
         return (int) (Math.sqrt( cellAmount ));
     }
-    
+
     public final int getClueLabelOnCell( int cellNum ) {
-        return clueLabelsOnCells.get(cellNum);
+        return clueLabelsOnCells.get( cellNum );
     }
 
 }

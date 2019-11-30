@@ -1,5 +1,7 @@
 package com.mycompany.nycrosswordpuzzle;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -28,8 +30,8 @@ public class Parser {
                 pw.println( newelm.get( i ).text() );
             }
             pw.close();
-        } catch ( Exception e ) {
-            e.printStackTrace();
+        } catch ( IOException e ) {
+            System.out.println( e );
         }
         return clues;
     }
@@ -51,9 +53,8 @@ public class Parser {
                 pw.println( blackCellID );
             }
             pw.close();
-        } catch ( Exception e ) {
-            e.printStackTrace();
-
+        } catch ( IOException | NumberFormatException e ) {
+            System.out.println( e );
         }
         return boxes;
 
@@ -73,8 +74,8 @@ public class Parser {
                 pw.println( newelm.get( i ).text() );
             }
             pw.close();
-        } catch ( Exception e ) {
-            e.printStackTrace();
+        } catch ( IOException | NumberFormatException e ) {
+            System.out.println( e );
         }
         return clueLabels;
     }
@@ -103,8 +104,8 @@ public class Parser {
 
             }
             pw.close();
-        } catch ( Exception e ) {
-            e.printStackTrace();
+        } catch ( IOException | NumberFormatException e ) {
+            System.out.println( e );
         }
         return clueLabels;
     }
@@ -118,8 +119,8 @@ public class Parser {
             Elements newelm = doc.select( "rect" );
             cellAmount = newelm.size() - 1;
 
-        } catch ( Exception e ) {
-            e.printStackTrace();
+        } catch ( IOException e ) {
+            System.out.println( e );
         }
 
         return cellAmount;
@@ -130,7 +131,6 @@ public class Parser {
         ArrayList<String> answers = new ArrayList();
         String allAnswers = "";
         SeleniumConnection s = new SeleniumConnection();
-
         try {
             Document doc = Jsoup.parse( s.pageSource() );
             Elements newelm = doc.select( "#xwd-board > g:nth-child(5)" );
@@ -142,13 +142,22 @@ public class Parser {
             }
             pw.close();
 
-            for ( char c : allAnswers.toCharArray() ) {
-//                System.out.println( c );
+            int length = allAnswers.length();
+            char[] anw = allAnswers.toCharArray();
+
+            //change due to saturday's puzzle
+            for ( int i = 0; i < length; i += 2 ) {
+                char c = anw[i];
                 answers.add( c + "" );
             }
-            pw.close();
-        } catch ( Exception e ) {
-            e.printStackTrace();
+            
+//            for ( char c : allAnswers.toCharArray() ) {
+////                System.out.println( c );
+//                answers.add( c + "" );
+//            }
+
+        } catch ( FileNotFoundException e ) {
+            System.out.println( e );
         }
 
         s.closeCon();
