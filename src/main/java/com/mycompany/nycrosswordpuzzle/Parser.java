@@ -36,6 +36,10 @@ public class Parser {
         return clues;
     }
 
+    /**
+     *
+     * @return Retrieves all of the the black box indexes
+     */
     public static ArrayList<Integer> getBoxes() {
         String url = "https://www.nytimes.com/crosswords/game/mini";
         ArrayList<Integer> boxes = new ArrayList();
@@ -60,6 +64,11 @@ public class Parser {
 
     }
 
+    /**
+     * Retrieve clue labels if there is one.
+     *
+     * @return
+     */
     public static ArrayList getClueLabels() {
         String url = "https://www.nytimes.com/crosswords/game/mini";
         ArrayList<Integer> clueLabels = new ArrayList();
@@ -80,6 +89,12 @@ public class Parser {
         return clueLabels;
     }
 
+    /**
+     * Retrieves all clue labels on cells. Inputs 0 if there isn't any clue
+     * label
+     *
+     * @return
+     */
     public static ArrayList<Integer> getClueLabelsOnCells() {
         String url = "https://www.nytimes.com/crosswords/game/mini";
         ArrayList<Integer> clueLabels = new ArrayList();
@@ -126,6 +141,10 @@ public class Parser {
         return cellAmount;
     }
 
+    /**
+     * Retrieves answers using Selenium
+     * @return
+     */
     public static ArrayList getAnswers() {
         String url = "https://www.nytimes.com/crosswords/game/mini";
         ArrayList<String> answers = new ArrayList();
@@ -150,12 +169,11 @@ public class Parser {
                 char c = anw[i];
                 answers.add( c + "" );
             }
-            
+
 //            for ( char c : allAnswers.toCharArray() ) {
 ////                System.out.println( c );
 //                answers.add( c + "" );
 //            }
-
         } catch ( FileNotFoundException e ) {
             System.out.println( e );
         }

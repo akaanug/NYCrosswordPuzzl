@@ -108,7 +108,7 @@ public class Constants {
     /**
      * (cell number, clue Number) adds 0 as clue number if the is none
      *
-     * @return
+     * @return clue numbers of all cells.
      */
     public final HashMap clueLabelsOnCells() {
         HashMap<Integer, Integer> clueLabels = new HashMap<>();
@@ -121,6 +121,9 @@ public class Constants {
         return clueLabels;
     }
 
+    /**
+     * @return an ArrayList of block status of the cells.
+     */
     public final ArrayList<Boolean> isTheBlock() {
         ArrayList isBox;
         isBox = new ArrayList();
@@ -136,6 +139,10 @@ public class Constants {
         return isBox;
     }
 
+    /**
+     * Get across clues from Parser
+     * @return
+     */
     public final HashMap acrossClues() {
         HashMap<Integer, String> clues = new HashMap<>();
         int clueSize = Parser.getClues().size() / 2;
@@ -147,6 +154,10 @@ public class Constants {
         return clues;
     }
 
+    /**
+     * Get down clues from Parser
+     * @return
+     */
     public final HashMap downClues() {
         HashMap<Integer, String> clues = new HashMap<>();
         int clueSize = Parser.getClues().size() / 2;
@@ -378,29 +389,6 @@ public class Constants {
                 searchSet.next();
                 dictAnswers.add( replaceWordInsideClue( searchSet.getString( "definition" ), currentWord ) );
             }
-
-//            int limit = 2;
-//            if ( numOfResults == 1 ) {
-//                limit = 1;
-//            }
-//            String query = "SELECT * FROM `entries` WHERE `word` LIKE '"
-//                    + currentWord + "' ORDER BY `word` DESC LIMIT " + limit;
-//            ResultSet rs = st.executeQuery( query );
-//
-//            if ( !rs.isBeforeFirst() ) {
-//                
-//            }
-//
-//            while ( rs.next() ) {
-//                System.out.println( "*D: Found in dictionary: " + rs.getString( "definition" ) );
-//            }
-//
-//            if ( numOfResults != 0 ) {
-//                String generatedClue = replaceWordInsideClue( rs.getString( "definition" ), currentWord );
-//                dictAnswers.add( generatedClue );
-//            }
-//
-//            
         }
         return dictAnswers;
     }
@@ -422,6 +410,11 @@ public class Constants {
                 .findFirst().get();
     }
 
+    /**
+     *Label the across clues into the HashMap with corresponding numbers.
+     * @return
+     * @throws SQLException
+     */
     public final HashMap<Integer, String> generateNewAcrossClues() throws SQLException {
 
         HashMap<Integer, String> newAcrossClues = new HashMap();
@@ -436,6 +429,11 @@ public class Constants {
         return newAcrossClues;
     }
 
+    /**
+     * Label the down clues into the HashMap with corresponding numbers.
+     * @return
+     * @throws SQLException
+     */
     public final HashMap<Integer, String> generateNewDownClues() throws SQLException {
 
         HashMap<Integer, String> newDownClues = new HashMap();

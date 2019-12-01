@@ -68,6 +68,11 @@ public class SetupPuzzle {
         return allCells;
     }
 
+    /**
+     * Assigns cells into the GUI form.
+     * @param cells
+     * @return an ArrayList of CellGUI objects assigned with corresponding cells
+     */
     public final ArrayList<CellGUI> assignCells( ArrayList<Cell> cells ) {
 
         ArrayList<CellGUI> allGUICells = new ArrayList();
