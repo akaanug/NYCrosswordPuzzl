@@ -23,6 +23,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,9 +37,11 @@ public class Constants {
     private final ArrayList<Boolean> isBlock;
     private final ArrayList<String> answers;
     private final ArrayList<String> answersAsWords;
+    private final ArrayList<String> downAnswersAsWordList;
     private final HashMap<Integer, String> downAnswersAsWords;
     private final HashMap<Integer, String> acrossClues;
     private final HashMap<Integer, String> generatedAcrossClues;
+    private final HashMap<Integer, String> generatedDownClues;
     private final HashMap<Integer, String> downClues;
     private final HashMap<Integer, Integer> clueLabelsOnCells;
 
@@ -61,10 +64,12 @@ public class Constants {
         this.answersAsWords = wordAnswers();
 
         this.downAnswersAsWords = downAnswersAsWords();
+        this.downAnswersAsWordList = downAnswersAsWordList();
 
         con = DriverManager.getConnection( DB_URL, DB_USER, DB_PASSWD );
         st = con.createStatement();
         this.generatedAcrossClues = generateNewAcrossClues();
+        this.generatedDownClues = generateNewDownClues();
 
     }
 
@@ -82,6 +87,10 @@ public class Constants {
 
     public final HashMap<Integer, String> getGeneratedAcross() {
         return generatedAcrossClues;
+    }
+
+    public final HashMap<Integer, String> getGeneratedDown() {
+        return generatedDownClues;
     }
 
     public final HashMap<Integer, String> getDown() {
@@ -158,6 +167,11 @@ public class Constants {
         return cellAmount;
     }
 
+    /**
+     * Get across answers as words to search it
+     *
+     * @return
+     */
     public final ArrayList<String> wordAnswers() {
         ArrayList<String> wordAnsw = new ArrayList();
         String word = "";
@@ -187,14 +201,14 @@ public class Constants {
     }
 
     /**
-     * Write down answers into the HashMap with the according label
+     * Write down answers into the HashMap with the according labels
      *
      * @return
      */
     public final HashMap<Integer, String> downAnswersAsWords() {
         int count = 0;
         int label = 0;
-        
+
         ArrayList<String> answersWithSpace = new ArrayList();
         for ( int i = 0; i < cellAmount; i++ ) {
             if ( isBlock.get( i ) ) {
@@ -203,10 +217,6 @@ public class Constants {
                 answersWithSpace.add( answers.get( count++ ) );
             }
         }
-
-        answersWithSpace.forEach( ( s ) -> {
-            System.out.println( s );
-        } );
 
         HashMap<Integer, String> wordAnsw = new HashMap();
         String word = "";
@@ -238,6 +248,16 @@ public class Constants {
     }
 
     /**
+     * Get down answers as an ArrayList in order to use it to search db
+     *
+     * @return
+     */
+    public final ArrayList<String> downAnswersAsWordList() {
+        ArrayList<String> list = new ArrayList<>( downAnswersAsWords.values() );
+        return list;
+    }
+
+    /**
      * Replace the words same as the answer inside generated clues with "____"
      *
      * @param clue
@@ -247,7 +267,7 @@ public class Constants {
     public String replaceWordInsideClue( String clue, String answer ) {
         String modifiedClue;
         if ( (clue != null) && (clue.toLowerCase().contains( answer.toLowerCase() )) ) {
-            clue = clue.replace( answer, "_______" );
+            clue = clue.replace( answer.toLowerCase(), "_______" );
             modifiedClue = clue;
             return modifiedClue;
         } else {
@@ -293,9 +313,10 @@ public class Constants {
 
         IIndexWord idxWord = dict.getIndexWord( wordToSearch, POS.NOUN );
         if ( idxWord == null ) {
-            System.out.println( "Word " + wordToSearch + " not found on WordNet." );
-            return null;
+            System.out.println( "*WN: Word " + wordToSearch + " not found on WordNet." );
+            return "NULL";
         }
+
         IWordID wordID = idxWord.getWordIDs().get( 0 );
         IWord word = dict.getWord( wordID );
         System.out.println( "Id = " + wordID );
@@ -308,18 +329,19 @@ public class Constants {
     /**
      * Search the dictionary database Pick second meaning if there is more than
      * one. Else pick the first one.(subject to change) If no result found in
-     * dictionary, call searchWordNet. Insert new clues into HashMap
+     * dictionary, call searchWordNet.
      *
-     * @param newAcrossClues
+     * @param answersToSearch
+     * @return
      * @throws SQLException
      */
-    public final void searchDictionaryDatabase( HashMap<Integer, String> newAcrossClues ) throws SQLException {
-
-        for ( int i = 0; i < answersAsWords.size(); i++ ) {
+    public final ArrayList<String> searchDictionary( ArrayList<String> answersToSearch ) throws SQLException {
+        ArrayList<String> dictAnswers = new ArrayList();
+        for ( int i = 0; i < answersToSearch.size(); i++ ) {
 
             System.out.println( "Searching Dictionary For: "
-                    + answersAsWords.get( i ) );
-            String currentWord = answersAsWords.get( i );
+                    + answersToSearch.get( i ) );
+            String currentWord = answersToSearch.get( i );
 
             //to search the results and see if there is more than one result
             String searchQuery = "SELECT * FROM `entries` WHERE `word` LIKE '"
@@ -328,48 +350,105 @@ public class Constants {
             int numOfResults = 0;
 
             while ( searchSet.next() ) {
+                System.out.println( "*D: Found in dictionary: " + searchSet.getString( "definition" ) );
                 numOfResults++;
             }
 
-            int limit = 2;
-            if ( numOfResults == 1 ) {
-                limit = 1;
-            }
-            String query = "SELECT * FROM `entries` WHERE `word` LIKE '"
-                    + currentWord + "' ORDER BY `word` DESC LIMIT " + limit;
-            ResultSet rs = st.executeQuery( query );
-//            rs.absolute( 1 );
-
-            if ( !rs.isBeforeFirst() ) {
+            //set the cursor to beginning
+            searchSet.first();
+            
+            //if no result found in dictionary, search wordNet
+            if ( numOfResults == 0 ) {
                 System.out.println( "Could not found " + currentWord
                         + " in dictionary." );
-            }
-
-            int clueLabel = (int) Parser.getClueLabels().get( i );
-            while ( rs.next() ) {
-                System.out.println( "Found in dictionary: " + rs.getString( "definition" ) );
-                String generatedClue = replaceWordInsideClue( rs.getString( "definition" ), currentWord );
-                newAcrossClues.put( clueLabel, generatedClue );
-            }
-
-            if ( numOfResults == 0 ) {
                 try {
-                    newAcrossClues.put( clueLabel,
-                            replaceWordInsideClue( searchWordNet( currentWord ), currentWord ) );
+                    String clueFromWordNet;
+                    clueFromWordNet = searchWordNet( currentWord );
+                    if ( clueFromWordNet != null ) {
+                        dictAnswers.add( replaceWordInsideClue( clueFromWordNet, currentWord ) );
+                    } else {
+                        dictAnswers.add( "NULL" );
+                    }
                 } catch ( IOException ex ) {
                     Logger.getLogger( Constants.class.getName() ).log( Level.SEVERE, null, ex );
                 }
+            } else if ( numOfResults == 1 ) {
+                dictAnswers.add( replaceWordInsideClue( searchSet.getString( "definition" ), currentWord ) );
+            } else {
+                searchSet.next();
+                dictAnswers.add( replaceWordInsideClue( searchSet.getString( "definition" ), currentWord ) );
             }
 
+//            int limit = 2;
+//            if ( numOfResults == 1 ) {
+//                limit = 1;
+//            }
+//            String query = "SELECT * FROM `entries` WHERE `word` LIKE '"
+//                    + currentWord + "' ORDER BY `word` DESC LIMIT " + limit;
+//            ResultSet rs = st.executeQuery( query );
+//
+//            if ( !rs.isBeforeFirst() ) {
+//                
+//            }
+//
+//            while ( rs.next() ) {
+//                System.out.println( "*D: Found in dictionary: " + rs.getString( "definition" ) );
+//            }
+//
+//            if ( numOfResults != 0 ) {
+//                String generatedClue = replaceWordInsideClue( rs.getString( "definition" ), currentWord );
+//                dictAnswers.add( generatedClue );
+//            }
+//
+//            
         }
+        return dictAnswers;
+    }
+
+    /**
+     * Get key of the corresponding value
+     *
+     * @param <K>
+     * @param <V>
+     * @param map
+     * @param value
+     * @return
+     */
+    public static <K, V> K getKey( Map<K, V> map, V value ) {
+        return map.entrySet()
+                .stream()
+                .filter( entry -> value.equals( entry.getValue() ) )
+                .map( Map.Entry::getKey )
+                .findFirst().get();
     }
 
     public final HashMap<Integer, String> generateNewAcrossClues() throws SQLException {
 
         HashMap<Integer, String> newAcrossClues = new HashMap();
-        searchDictionaryDatabase( newAcrossClues );
-        return newAcrossClues;
+        ArrayList<String> dictAcrossAnswers = searchDictionary( answersAsWords );
 
+        for ( int i = 0; i < answersAsWords.size(); i++ ) {
+            String currentClue = dictAcrossAnswers.get( i );
+            int clueLabel = (int) Parser.getClueLabels().get( i );
+            newAcrossClues.put( clueLabel, currentClue );
+        }
+
+        return newAcrossClues;
     }
 
+    public final HashMap<Integer, String> generateNewDownClues() throws SQLException {
+
+        HashMap<Integer, String> newDownClues = new HashMap();
+        ArrayList<String> dictDownAnswers = searchDictionary( downAnswersAsWordList );
+
+        for ( int i = 0; i < downAnswersAsWordList.size(); i++ ) {
+            String currentWord = downAnswersAsWordList.get( i );
+            String currentClue = dictDownAnswers.get( i );
+            int clueLabel;
+            clueLabel = getKey( downAnswersAsWords, currentWord );
+            newDownClues.put( clueLabel, currentClue );
+        }
+
+        return newDownClues;
+    }
 }
