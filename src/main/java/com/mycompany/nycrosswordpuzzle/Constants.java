@@ -346,25 +346,24 @@ public class Constants {
     public final String searchUrbanDictionary( String wordToSearch ) throws IOException {
 
         System.out.println( "Seaching Urban Dictionary for " + wordToSearch );
-        
+
         Document doc = Jsoup.connect( "https://www.urbandictionary.com/define.php?term=" + "dunno" ).get();
         Elements newelm = doc.getElementsByClass( "meaning" );
 
-        if( doc != null || newelm != null ) {
+        if ( doc != null || newelm != null ) {
             System.out.println( "*UD: " + newelm.first().text() );
             return newelm.first().text();
         } else {
             System.out.println( "*UD: Word" + wordToSearch + " not found on WordNet." );
             return null;
         }
-        
+
     }
 
     /**
-     * Search the dictionary database Pick second meaning if there is more than
-     * one. Else pick the first one.(subject to change) If no result found in
-     * dictionary, call searchWordNet. If searchWordNet also returns null, search
-     * urban dictionary.
+     * Search the dictionary database and pick the shortest clue. If no result
+     * found in dictionary, call searchWordNet. If searchWordNet also returns
+     * null, search urban dictionary.
      *
      * @param answersToSearch
      * @return
@@ -384,9 +383,34 @@ public class Constants {
             ResultSet searchSet = st.executeQuery( searchQuery );
             int numOfResults = 0;
 
-            while ( searchSet.next() ) {
-                System.out.println( "*D: Found in dictionary: " + searchSet.getString( "definition" ) );
+            int minClueLength;
+            int currClueLength;
+            String shortestClue = "";
+
+            if ( searchSet.next() ) { //if searchSet is not empty
+                currClueLength = searchSet.getString( "definition" ).length();
+                shortestClue = searchSet.getString( "definition" );
+                minClueLength = currClueLength;
+                System.out.println( "*D: Found in dictionary: "
+                        + searchSet.getString( "definition" )
+                        + "-LENGTH: " + currClueLength + "-" );
                 numOfResults++;
+
+                while ( searchSet.next() ) {
+                    currClueLength = searchSet.getString( "definition" ).length();
+                    if ( currClueLength < minClueLength ) {
+                        minClueLength = currClueLength;
+                        shortestClue = searchSet.getString( "definition" );
+                    }
+
+                    System.out.println( "*D: Found in dictionary: "
+                            + searchSet.getString( "definition" ) + "-LENGTH: "
+                            + currClueLength + "-" );
+                    numOfResults++;
+                }
+
+                System.out.println( "*D: Shortest Clue found is: "
+                        + shortestClue + "-LENGTH: " + minClueLength + "-" );
             }
 
             //set the cursor to beginning
@@ -404,7 +428,7 @@ public class Constants {
                     } else {
                         String clueFromUrban;
                         clueFromUrban = searchUrbanDictionary( currentWord );
-                        if( clueFromUrban != null ) {
+                        if ( clueFromUrban != null ) {
                             dictAnswers.add( replaceWordInsideClue( clueFromUrban, currentWord ) );
                         } else {
                             dictAnswers.add( "NULL" );
@@ -413,11 +437,8 @@ public class Constants {
                 } catch ( IOException ex ) {
                     Logger.getLogger( Constants.class.getName() ).log( Level.SEVERE, null, ex );
                 }
-            } else if ( numOfResults == 1 ) {
-                dictAnswers.add( replaceWordInsideClue( searchSet.getString( "definition" ), currentWord ) );
             } else {
-                searchSet.next();
-                dictAnswers.add( replaceWordInsideClue( searchSet.getString( "definition" ), currentWord ) );
+                dictAnswers.add( replaceWordInsideClue( shortestClue, currentWord ) );
             }
         }
         return dictAnswers;
