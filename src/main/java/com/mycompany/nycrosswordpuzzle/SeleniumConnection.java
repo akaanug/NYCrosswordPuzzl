@@ -33,7 +33,7 @@ public class SeleniumConnection {
         webDriver.findElements( By.xpath( "//*[@id=\"root\"]/div/div[2]/div[2]/article/div[2]/button[2]" ) ).get( 0 ).click();
         webDriver.findElement( By.xpath( "//*[@id=\"root\"]/div/div[2]/div[2]/span" ) ).click();
 
-        String pageSource = webDriver.getPageSource();
+        String pageSource = webDriver.getPageSource(); //************************
 //        System.out.println( pageSource );
 
     }

@@ -26,6 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -141,6 +145,7 @@ public class Constants {
 
     /**
      * Get across clues from Parser
+     *
      * @return
      */
     public final HashMap acrossClues() {
@@ -156,6 +161,7 @@ public class Constants {
 
     /**
      * Get down clues from Parser
+     *
      * @return
      */
     public final HashMap downClues() {
@@ -287,7 +293,7 @@ public class Constants {
     }
 
     /**
-     * Searches wordNet
+     * Searches wordNet.
      *
      * @param wordToSearch
      * @return
@@ -325,7 +331,7 @@ public class Constants {
         IIndexWord idxWord = dict.getIndexWord( wordToSearch, POS.NOUN );
         if ( idxWord == null ) {
             System.out.println( "*WN: Word " + wordToSearch + " not found on WordNet." );
-            return "NULL";
+            return null;
         }
 
         IWordID wordID = idxWord.getWordIDs().get( 0 );
@@ -337,10 +343,28 @@ public class Constants {
         return word.getSynset().getGloss();
     }
 
+    public final String searchUrbanDictionary( String wordToSearch ) throws IOException {
+
+        System.out.println( "Seaching Urban Dictionary for " + wordToSearch );
+        
+        Document doc = Jsoup.connect( "https://www.urbandictionary.com/define.php?term=" + "dunno" ).get();
+        Elements newelm = doc.getElementsByClass( "meaning" );
+
+        if( doc != null || newelm != null ) {
+            System.out.println( "*UD: " + newelm.first().text() );
+            return newelm.first().text();
+        } else {
+            System.out.println( "*UD: Word" + wordToSearch + " not found on WordNet." );
+            return null;
+        }
+        
+    }
+
     /**
      * Search the dictionary database Pick second meaning if there is more than
      * one. Else pick the first one.(subject to change) If no result found in
-     * dictionary, call searchWordNet.
+     * dictionary, call searchWordNet. If searchWordNet also returns null, search
+     * urban dictionary.
      *
      * @param answersToSearch
      * @return
@@ -367,7 +391,7 @@ public class Constants {
 
             //set the cursor to beginning
             searchSet.first();
-            
+
             //if no result found in dictionary, search wordNet
             if ( numOfResults == 0 ) {
                 System.out.println( "Could not found " + currentWord
@@ -378,7 +402,13 @@ public class Constants {
                     if ( clueFromWordNet != null ) {
                         dictAnswers.add( replaceWordInsideClue( clueFromWordNet, currentWord ) );
                     } else {
-                        dictAnswers.add( "NULL" );
+                        String clueFromUrban;
+                        clueFromUrban = searchUrbanDictionary( currentWord );
+                        if( clueFromUrban != null ) {
+                            dictAnswers.add( replaceWordInsideClue( clueFromUrban, currentWord ) );
+                        } else {
+                            dictAnswers.add( "NULL" );
+                        }
                     }
                 } catch ( IOException ex ) {
                     Logger.getLogger( Constants.class.getName() ).log( Level.SEVERE, null, ex );
@@ -411,7 +441,8 @@ public class Constants {
     }
 
     /**
-     *Label the across clues into the HashMap with corresponding numbers.
+     * Label the across clues into the HashMap with corresponding numbers.
+     *
      * @return
      * @throws SQLException
      */
@@ -431,6 +462,7 @@ public class Constants {
 
     /**
      * Label the down clues into the HashMap with corresponding numbers.
+     *
      * @return
      * @throws SQLException
      */

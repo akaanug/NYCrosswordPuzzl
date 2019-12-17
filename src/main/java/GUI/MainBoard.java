@@ -47,7 +47,8 @@ public class MainBoard extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        board.setLayout(new java.awt.GridLayout());
+        board.setBackground(new java.awt.Color(255, 255, 255));
+        board.setLayout(new java.awt.GridLayout(1, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
