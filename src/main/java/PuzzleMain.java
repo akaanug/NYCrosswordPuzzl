@@ -1,4 +1,5 @@
 
+import GUI.consoleGUI;
 import com.mycompany.nycrosswordpuzzle.SetupPuzzle;
 import java.sql.SQLException;
 
@@ -19,7 +20,15 @@ public class PuzzleMain {
      */
     public static void main( String[] args ) throws SQLException {
         // TODO code application logic here
+        consoleGUI g = new consoleGUI();
+        g.setLocation( 2, 1000 );
+        g.setVisible( true );
+        System.out.println( "( *D for dictionary outputs, *WN for wordnet, "
+                + " *UD for Urban dictionary )" );
         SetupPuzzle set = new SetupPuzzle();
+        System.out.println( "( *D for dictionary outputs, *WN for wordnet, "
+                + " *UD for Urban dictionary" );
+
     }
 
 }

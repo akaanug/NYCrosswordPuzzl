@@ -28,7 +28,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
@@ -314,7 +313,7 @@ public class Constants {
         IDictionary dict = new Dictionary( url );
         dict.open();
 
-        System.out.println( "Seaching Wordnet for " + wordToSearch );
+        System.out.println( "*WN Seaching Wordnet for " + wordToSearch );
 
         // look up first sense of the word
         String stem;
@@ -345,7 +344,7 @@ public class Constants {
 
     public final String searchUrbanDictionary( String wordToSearch ) throws IOException {
 
-        System.out.println( "Seaching Urban Dictionary for " + wordToSearch );
+        System.out.println( "*UD Seaching Urban Dictionary for " + wordToSearch );
 
         Document doc = Jsoup.connect( "https://www.urbandictionary.com/define.php?term=" + "dunno" ).get();
         Elements newelm = doc.getElementsByClass( "meaning" );
