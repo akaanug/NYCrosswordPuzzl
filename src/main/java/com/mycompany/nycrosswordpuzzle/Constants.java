@@ -21,13 +21,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
@@ -335,9 +338,9 @@ public class Constants {
 
         IWordID wordID = idxWord.getWordIDs().get( 0 );
         IWord word = dict.getWord( wordID );
-        System.out.println( "Id = " + wordID );
-        System.out.println( "Lemma = " + word.getLemma() );
-        System.out.println( "Gloss = " + word.getSynset().getGloss() );
+        System.out.println( "*WN Id = " + wordID );
+        System.out.println( "*WN Lemma = " + word.getLemma() );
+        System.out.println( "*WN Gloss = " + word.getSynset().getGloss() );
 
         return word.getSynset().getGloss();
     }
@@ -346,14 +349,40 @@ public class Constants {
 
         System.out.println( "*UD Seaching Urban Dictionary for " + wordToSearch );
 
-        Document doc = Jsoup.connect( "https://www.urbandictionary.com/define.php?term=" + "dunno" ).get();
-        Elements newelm = doc.getElementsByClass( "meaning" );
+        try {
+            Document doc = Jsoup.connect( "https://www.urbandictionary.com/define.php?term=" + wordToSearch ).get();
+            Elements newelm = doc.getElementsByClass( "meaning" );
+            Iterator<Element> iter = newelm.iterator();
 
-        if ( doc != null || newelm != null ) {
-            System.out.println( "*UD: " + newelm.first().text() );
-            return newelm.first().text();
-        } else {
-            System.out.println( "*UD: Word" + wordToSearch + " not found on WordNet." );
+            if ( doc != null || newelm != null ) {
+                System.out.println( "*UD: " + newelm.first().text() );
+                int index = newelm.first().text().lastIndexOf( ". " );
+                int firstpt = newelm.first().text().indexOf( ". " );
+
+                if ( !(newelm.first().text().substring( 0, index ).contains( wordToSearch ))
+                        && newelm.first().text().substring( 0, firstpt ).length() > wordToSearch.length() ) {
+                    System.out.println( "*UD taking " + (newelm.first().text().substring( 0, index )) );
+                    return (newelm.first().text().substring( 0, index ));
+                } else if ( !(newelm.first().text().substring( 0, index ).contains( wordToSearch )) ) {
+                    System.out.println( "*UD taking " + newelm.first().text().substring( index + 2, newelm.first().text().length() ) );
+                    return newelm.first().text().substring( index + 2, newelm.first().text().length() );
+                }
+
+                if ( newelm.first().text().contains( wordToSearch ) ) {
+                    if ( iter.hasNext() ) {
+                        System.out.println( "*UD taking " + newelm.first().text().substring( index, newelm.first().text().length() ) );
+                        return newelm.first().text().substring( index, newelm.first().text().length() );
+                    }
+                }
+                return (newelm.first().text().substring( 0, index ));
+
+//                return newelm.first().text();
+            } else {
+                System.out.println( "*UD: Word" + wordToSearch + " not found on WordNet." );
+                return null;
+            }
+        } catch ( Exception e ) {
+            System.out.println( "*UD Word not found on Urban Dictionary" );
             return null;
         }
 
@@ -372,7 +401,7 @@ public class Constants {
         ArrayList<String> dictAnswers = new ArrayList();
         for ( int i = 0; i < answersToSearch.size(); i++ ) {
 
-            System.out.println( "Searching Dictionary For: "
+            System.out.println( "*D Searching Dictionary For: "
                     + answersToSearch.get( i ) );
             String currentWord = answersToSearch.get( i );
 
@@ -385,6 +414,9 @@ public class Constants {
             int minClueLength;
             int currClueLength;
             String shortestClue = "";
+
+            boolean wrongClue = false;
+            String rc = null;
 
             if ( searchSet.next() ) { //if searchSet is not empty
                 currClueLength = searchSet.getString( "definition" ).length();
@@ -410,6 +442,22 @@ public class Constants {
 
                 System.out.println( "*D: Shortest Clue found is: "
                         + shortestClue + "-LENGTH: " + minClueLength + "-" );
+
+                if ( shortestClue != null && (shortestClue.contains( "Alt. of" )
+                        || shortestClue.contains( ("of " + currentWord).substring( 0, currentWord.length() - 1 ) )) ) {
+                    System.out.println( "*D Incorrect Clue" );
+                    wrongClue = true;
+                    try {
+                        shortestClue = replaceWordInsideClue( searchWordNet( currentWord ), currentWord );
+                        if ( shortestClue == null ) {
+                            shortestClue = searchUrbanDictionary( currentWord );
+                            int l = shortestClue.lastIndexOf( ". " );
+//                            shortestClue = shortestClue.substring( l, shortestClue.length());
+                        }
+                    } catch ( IOException IOException ) {
+                        System.out.println( IOException );
+                    }
+                }
             }
 
             //set the cursor to beginning
@@ -417,7 +465,7 @@ public class Constants {
 
             //if no result found in dictionary, search wordNet
             if ( numOfResults == 0 ) {
-                System.out.println( "Could not found " + currentWord
+                System.out.println( "*D Could not found " + currentWord
                         + " in dictionary." );
                 try {
                     String clueFromWordNet;
