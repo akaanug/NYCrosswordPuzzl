@@ -1,5 +1,6 @@
 # NYCrosswordPuzzle
-Finds new clues from the answers of latest puzzle's answers.
+CS461 Term Project
+Extract Joel Fagliano's NY Crossword puzzle and find new clues from the answers of the latest puzzle.
 
 java version "1.8.0_192"
 
